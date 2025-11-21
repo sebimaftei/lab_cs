@@ -8,8 +8,15 @@ using ProductsManagement.Features.Products;
 using ProductsManagement.Persistence;
 using ProductsManagement.Products;
 using ProductsManagement.Validators;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration)
+        .Enrich.FromLogContext()
+        .WriteTo.Console(
+            outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}"));
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -58,6 +65,8 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+app.UseCorrelationIdMiddleware();
 
 // Ensure the database is created at runtime
 using (var scope = app.Services.CreateScope())
