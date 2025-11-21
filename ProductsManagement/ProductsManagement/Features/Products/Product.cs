@@ -5,9 +5,10 @@ namespace ProductsManagement.Features.Products;
 public record Product(Guid Id, 
     string Name, 
     string Brand, 
-    string Sku, 
+    string Sku,
     ProductCategory Category, 
-    decimal Price, DateTime ReleaseDate, 
+    decimal Price, 
+    DateTime ReleaseDate,
+    bool IsAvailable,
     int StockQuantity = 0,
-    string? ImageUrl = null
-);
+    string? ImageUrl = null);
